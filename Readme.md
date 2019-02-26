@@ -13,6 +13,11 @@ harness the power of *Cohesity App APIs* in your Golang applications.These
 ```bash
 go get github.com/cohesity/app-sdk-go
 ```
+Note: To update the package do:
+
+```
+ go get -u github.com/cohesity/app-sdk-go
+```
 
 ## Container Environment Parameters
 
@@ -33,8 +38,8 @@ In order to setup authentication and initialization of the API client, you need 
 
 ```
 AppAuthToken := os.Getenv("APP_AUTHENTICATION_TOKEN")
-AppEndpointIp := os.Getenv("APP_ENDPOINT_IP")
-AppEndpointPort := os.Getenv("APP_ENDPOINT_PORT")
+AppEndpointIp := os.Getenv("APPS_API_ENDPOINT_IP")
+AppEndpointPort := os.Getenv("APPS_API_ENDPOINT_PORT")
 
 //Initialize the App Client.
 client := CohesityAppSdk.NewAppSdkClient(AppAuthToken, AppEndpointIp, AppEndpointPort)
