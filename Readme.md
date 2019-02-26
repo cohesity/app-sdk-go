@@ -50,3 +50,6 @@ var err error
 var result *models.AppSettings
 result, err = settings.GetAppSettings()
 ```
+
+## Questions or Feedback :
+We would love to hear from you. Please send your questions and feedback to: *developer@cohesity.com*
