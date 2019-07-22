@@ -1,2 +1,2 @@
  # exclude everything here
- tests/
+ /tests
