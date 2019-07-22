@@ -1,8 +1,8 @@
-// Copyright 2019 Cohesity Inc.
 package unirest
 
 import (
 	"bytes"
+	"crypto/tls"
 	"encoding/base64"
 	"encoding/json"
 	"errors"
@@ -64,7 +64,7 @@ func makeRequest(method HttpMethod, url string,
 	return request
 }
 
-func (me *Request) PerformRequest() (*http.Response, error) {
+func (me *Request) PerformRequest(skipVerify bool) (*http.Response, error) {
 	var req *http.Request
 	var err error
 	var method = me.httpMethod.ToString()
@@ -85,12 +85,13 @@ func (me *Request) PerformRequest() (*http.Response, error) {
 	me.httpClient.Transport.(*http.Transport).TLSHandshakeTimeout += 2 * time.Second
 	me.httpClient.Transport.(*http.Transport).ResponseHeaderTimeout = 10 * time.Second
 
-	//perform the underlying http request
+	//set skipVerify SSL
+	me.httpClient.Transport.(*http.Transport).TLSClientConfig = &tls.Config{InsecureSkipVerify: skipVerify}
+
 	res, err := me.httpClient.Do(req)
 	if err != nil {
 		return nil, err
 	}
-
 	return res, nil
 }
 
@@ -159,6 +160,9 @@ func (me *Request) encodeRawBody(method string) (*http.Request, error) {
 
 	reader := bytes.NewReader(bodyBytes)
 	req, err := http.NewRequest(method, me.url, reader)
+	if err != nil {
+		return nil, err
+	}
 	req.Header.Set("Content-Length", strconv.Itoa(len(string(bodyBytes))))
 	if !isString {
 		req.Header.Set("Content-Type", "application/json; charset=utf-8")

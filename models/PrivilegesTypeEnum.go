@@ -1,3 +1,4 @@
+// Copyright 2019 Cohesity Inc.
 package models
 
 import(
@@ -18,18 +19,18 @@ const (
     PrivilegesType_KSPECIFIC
 )
 
-func (r PrivilegesTypeEnum) MarshalJSON() ([]byte, error) { 
+func (r PrivilegesTypeEnum) MarshalJSON() ([]byte, error) {
     s := PrivilegesTypeEnumToValue(r)
-    return json.Marshal(s) 
-} 
+    return json.Marshal(s)
+}
 
-func (r *PrivilegesTypeEnum) UnmarshalJSON(data []byte) error { 
-    var s string 
+func (r *PrivilegesTypeEnum) UnmarshalJSON(data []byte) error {
+    var s string
     json.Unmarshal(data, &s)
     v :=  PrivilegesTypeEnumFromValue(s)
-    *r = v 
-    return nil 
- } 
+    *r = v
+    return nil
+ }
 
 
 /**
@@ -38,11 +39,11 @@ func (r *PrivilegesTypeEnum) UnmarshalJSON(data []byte) error {
 func PrivilegesTypeEnumToValue(privilegesTypeEnum PrivilegesTypeEnum) string {
     switch privilegesTypeEnum {
         case PrivilegesType_KNONE:
-    		return "kNone"		
+    		return "kNone"
         case PrivilegesType_KALL:
-    		return "kAll"		
+    		return "kAll"
         case PrivilegesType_KSPECIFIC:
-    		return "kSpecific"		
+    		return "kSpecific"
         default:
         	return "kNone"
     }

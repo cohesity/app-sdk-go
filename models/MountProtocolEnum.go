@@ -1,3 +1,4 @@
+// Copyright 2019 Cohesity Inc.
 package models
 
 import(
@@ -15,20 +16,21 @@ type MountProtocolEnum int
 const (
     MountProtocol_KNFS MountProtocolEnum = 1 + iota
     MountProtocol_KSMB
+    MountProtocol_KVOLUME
 )
 
-func (r MountProtocolEnum) MarshalJSON() ([]byte, error) { 
+func (r MountProtocolEnum) MarshalJSON() ([]byte, error) {
     s := MountProtocolEnumToValue(r)
-    return json.Marshal(s) 
-} 
+    return json.Marshal(s)
+}
 
-func (r *MountProtocolEnum) UnmarshalJSON(data []byte) error { 
-    var s string 
+func (r *MountProtocolEnum) UnmarshalJSON(data []byte) error {
+    var s string
     json.Unmarshal(data, &s)
     v :=  MountProtocolEnumFromValue(s)
-    *r = v 
-    return nil 
- } 
+    *r = v
+    return nil
+ }
 
 
 /**
@@ -37,9 +39,11 @@ func (r *MountProtocolEnum) UnmarshalJSON(data []byte) error {
 func MountProtocolEnumToValue(mountProtocolEnum MountProtocolEnum) string {
     switch mountProtocolEnum {
         case MountProtocol_KNFS:
-    		return "kNfs"		
+    		return "kNfs"
         case MountProtocol_KSMB:
-    		return "kSmb"		
+    		return "kSmb"
+        case MountProtocol_KVOLUME:
+    		return "kVolume"
         default:
         	return "kNfs"
     }
@@ -66,6 +70,8 @@ func MountProtocolEnumFromValue(value string) MountProtocolEnum {
             return MountProtocol_KNFS
         case "kSmb":
             return MountProtocol_KSMB
+        case "kVolume":
+            return MountProtocol_KVOLUME
         default:
             return MountProtocol_KNFS
     }

@@ -1,4 +1,3 @@
-// Copyright 2019 Cohesity Inc.
 package unirest
 
 import (

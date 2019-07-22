@@ -1,14 +1,14 @@
+// Copyright 2019 Cohesity Inc.
 package apihelper
 
 import (
-	"bytes"
-	"errors"
-	"net/url"
-	"reflect"
-	"regexp"
-	"strings"
-
-	unirest "github.com/cohesity/app-sdk-go/unirest-go"
+    "reflect"
+    "errors"
+    "regexp"
+    "strings"
+    "bytes"
+    "net/url"
+    "github.com/cohesity/management-sdk-go/unirest-go"
 )
 
 /**
@@ -17,52 +17,52 @@ import (
  * @param	parameters		The parameters to replace in the url
  * @return	Returns url replaced with template values
  */
-func ToString(data interface{}, dvl string) string {
-	return unirest.ToString(data, dvl)
+func ToString(data interface{},dvl string) string {
+    return unirest.ToString(data, dvl);
 }
 func AppendUrlWithTemplateParameters(queryBuilder string, parameters map[string]interface{}) (string, error) {
-	//perform parameter validation
-	if len(queryBuilder) < 1 {
-		return queryBuilder, errors.New("Given value for parameter \"queryBuilder\" is invalid.")
-	}
-	if len(parameters) < 1 {
-		return queryBuilder, nil
-	}
+    //perform parameter validation
+    if (len(queryBuilder) < 1) {
+        return queryBuilder, errors.New("Given value for parameter \"queryBuilder\" is invalid.")
+    }
+    if (len(parameters) < 1) {
+        return queryBuilder, nil;
+    }
 
-	//iterate and append parameters
-	for key, value := range parameters {
-		//ignore null values
-		if value == nil {
-			continue
-		}
+    //iterate and append parameters
+    for key, value := range parameters {
+        //ignore null values
+        if(value == nil) {
+            continue
+        }
 
-		replaceValue := ""
+        replaceValue := ""
 
-		//load parameter value
-		if str, ok := value.(string); ok {
-			replaceValue = str
-		} else if strA, ok := value.([]string); ok {
-			replaceValue = strings.Join(strA, "/")
-		} else if strA, ok := value.([]int64); ok {
-			for i := 0; i < len(strA); i++ {
-				if i == 0 {
-					replaceValue += unirest.ToString(strA[i], "")
-				} else {
-					replaceValue += "/" + unirest.ToString(strA[i], "")
-				}
-			}
+        //load parameter value
+        if str, ok := value.(string); ok {
+            replaceValue = str
+        } else if strA, ok := value.([]string); ok {
+            replaceValue = strings.Join(strA, "/")
+        }else if strA, ok := value.([]int64); ok {
+            for i:=0;i<len(strA);i++{
+                if(i==0){
+                    replaceValue += unirest.ToString(strA[i],"")
+                } else{
+                    replaceValue += "/" + unirest.ToString(strA[i],"")
+                }
+            }
 
-		} else {
-			replaceValue = url.QueryEscape(ToString(value, ""))
-		}
+        }else {
+            replaceValue = url.QueryEscape(ToString(value,""))
+        }
 
-		//to replace
-		toReplace := "{" + key + "}"
+        //to replace
+        toReplace := "{" + key + "}"
 
-		//find the template parameter and replace it with its value
-		queryBuilder = strings.Replace(queryBuilder, toReplace, replaceValue, -1)
-	}
-	return queryBuilder, nil
+        //find the template parameter and replace it with its value
+        queryBuilder = strings.Replace(queryBuilder, toReplace, replaceValue, -1)
+    }
+    return queryBuilder, nil
 }
 
 /**
@@ -72,57 +72,57 @@ func AppendUrlWithTemplateParameters(queryBuilder string, parameters map[string]
  * @return	void
  */
 func AppendUrlWithQueryParameters(queryBuilder string, parameters map[string]interface{}) (string, error) {
-	//perform parameter validation
-	if len(queryBuilder) < 1 {
-		return queryBuilder, errors.New("Given value for parameter \"queryBuilder\" is invalid.")
-	}
-	if len(parameters) < 1 {
-		return queryBuilder, nil
-	}
-	//does the query string already has parameters
-	hasParams := (strings.Index(queryBuilder, "?") > 0)
+    //perform parameter validation
+    if (len(queryBuilder) < 1) {
+        return queryBuilder, errors.New("Given value for parameter \"queryBuilder\" is invalid.")
+    }
+    if (len(parameters) < 1) {
+        return queryBuilder, nil;
+    }
+    //does the query string already has parameters
+    hasParams := (strings.Index(queryBuilder, "?") > 0)
 
-	var buf bytes.Buffer
-	buf.WriteString(queryBuilder)
+    var buf bytes.Buffer
+    buf.WriteString(queryBuilder)
 
-	//iterate and append parameters
-	for key, value := range parameters {
-		//ignore null values
-		if value == nil {
-			continue
-		}
+    //iterate and append parameters
+    for key, value := range parameters {
+        //ignore null values
+        if(value == nil) {
+            continue
+        }
 
-		var toAppend string
+        var toAppend string
 
-		if reflect.TypeOf(value).Kind() == reflect.Slice {
-			toAppend = arrayToQuery(key, value)
-		} else {
-			strVal := unirest.ToString(value, "")
-			if len(strVal) > 0 {
-				toAppend = url.QueryEscape(key) + "=" + url.QueryEscape(strVal)
-			}
-		}
+        if reflect.TypeOf(value).Kind() == reflect.Slice {
+            toAppend = arrayToQuery(key, value)
+        } else {
+            strVal := unirest.ToString(value, "")
+            if(len(strVal) > 0){
+                toAppend = url.QueryEscape(key) + "=" + url.QueryEscape(strVal)
+            }
+        }
 
-		//have something to append?
-		if len(toAppend) < 1 {
-			continue
-		}
+        //have something to append?
+        if(len(toAppend) < 1) {
+            continue
+        }
 
-		//if already has parameters, use the &amp; to append new parameters
-		if hasParams {
-			buf.WriteString("&")
-		} else {
-			buf.WriteString("?")
-		}
+        //if already has parameters, use the &amp; to append new parameters
+        if(hasParams){
+            buf.WriteString("&")
+        } else {
+            buf.WriteString("?")
+        }
 
-		//indicate that now the query has some params
-		hasParams = true
+        //indicate that now the query has some params
+        hasParams = true
 
-		//append value
-		buf.WriteString(toAppend)
-	}
+        //append value
+        buf.WriteString(toAppend)
+    }
 
-	return buf.String(), nil
+    return buf.String(), nil
 }
 
 /**
@@ -131,21 +131,21 @@ func AppendUrlWithQueryParameters(queryBuilder string, parameters map[string]int
  * @param	values	The array of values for the query
  */
 func arrayToQuery(key string, data interface{}) string {
-	var buf bytes.Buffer
-	values := reflect.ValueOf(data)
+    var buf bytes.Buffer
+    values := reflect.ValueOf(data)
 
-	for index := 0; index < values.Len(); index++ {
-		buf.WriteString(url.QueryEscape(key))
-		buf.WriteByte('=')
-		value := unirest.ToString(values.Index(index).Interface(), "")
-		buf.WriteString(url.QueryEscape(value))
-		buf.WriteByte('&')
-	}
-	s := buf.String()
-	if len(s) < 1 {
-		return ""
-	}
-	return s[0 : len(s)-1]
+    for index := 0; index < values.Len(); index++ {
+        buf.WriteString(url.QueryEscape(key))
+        buf.WriteByte('=')
+        value := unirest.ToString(values.Index(index).Interface(), "")
+        buf.WriteString(url.QueryEscape(value))
+        buf.WriteByte('&')
+    }
+    s := buf.String()
+    if(len(s) < 1) {
+        return ""
+    }
+    return s[0 : len(s)-1]
 }
 
 /**
@@ -154,31 +154,32 @@ func arrayToQuery(key string, data interface{}) string {
  * @return   Pre-processed Url as string
  */
 func CleanUrl(url string) (string, error) {
-	//perform parameter validation
-	if len(url) < 1 {
-		return "", errors.New("Invalid Url.")
-	}
-	//ensure that the urls are absolute
-	isMatch, err := regexp.MatchString("^(https?://[^/]+)", url)
-	if err != nil || !isMatch {
-		return "", errors.New("Invalid Url format.")
-	}
-	var query, parameters string
-	//get the http protocol match
-	protocol := url[0:7]
-	if strings.Contains(url, "?") {
-		query = url[7:strings.Index(url, "?")]
-		parameters = url[strings.Index(url, "?"):len(url)]
-	} else {
-		query = url[7:len(url)]
-		parameters = ""
-	}
+    //perform parameter validation
+    if(len(url) < 1) {
+        return "", errors.New("Invalid Url.")
+    }
+    //ensure that the urls are absolute
+    isMatch, err := regexp.MatchString("^(https?://[^/]+)", url)
+    if (err != nil || !isMatch) {
+        return "", errors.New("Invalid Url format.")
+    }
+    var query,parameters string
+    //get the http protocol match
+    protocol := url[0:7]
+    if strings.Contains(url,"?"){
+    query = url[7:strings.Index(url,"?")]
+    parameters = url[strings.Index(url,"?"):len(url)]
+    } else {
+        query = url[7:len(url)]
+        parameters =""
+    }
 
-	//remove redundant forward slashes
-	re := regexp.MustCompile("//+")
-	query = re.ReplaceAllString(query, "/")
-	url = protocol + query + parameters
+    //remove redundant forward slashes
+    re := regexp.MustCompile("//+")
+    query = re.ReplaceAllString(query, "/")
+    url = protocol + query + parameters
 
-	//return process url
-	return url, nil
+
+    //return process url
+    return url, nil
 }

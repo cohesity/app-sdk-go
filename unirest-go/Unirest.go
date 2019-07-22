@@ -46,19 +46,19 @@ func PatchWithAuth(url string, headers map[string]interface{}, body interface{},
 	return req
 }
 
-func Delete(url string, headers map[string]interface{}, body interface{}) *Request {
-	req := NewRequest(DELETE, url, headers, body, "", "")
+func Delete(url string, headers map[string]interface{},body interface{}) *Request {
+	req := NewRequest(DELETE, url, headers,body, "", "")
 	return req
 }
 
-func DeleteWithAuth(url string, headers map[string]interface{}, body interface{}, username string, password string) *Request {
+func DeleteWithAuth(url string, headers map[string]interface{},body interface{}, username string, password string) *Request {
 	req := NewRequest(DELETE, url, headers, body, username, password)
 	return req
 }
 
-func AsBinary(request *Request) (*Response, error) {
+func AsBinary(request *Request,skipVerify bool) (*Response, error) {
 	//perform the underlying http request
-	res, err := request.PerformRequest()
+	res, err := request.PerformRequest(skipVerify)
 	if err != nil {
 		return nil, err
 	}
@@ -66,9 +66,9 @@ func AsBinary(request *Request) (*Response, error) {
 	return NewBinaryResponse(res)
 }
 
-func AsString(request *Request) (*Response, error) {
+func AsString(request *Request,skipVerify bool) (*Response, error) {
 	//perform the underlying http request
-	resp, err := request.PerformRequest()
+	resp, err := request.PerformRequest(skipVerify)
 	if err != nil {
 		return nil, err
 	}

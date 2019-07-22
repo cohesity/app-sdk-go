@@ -1,0 +1,26 @@
+{
+"AppAuthToken" : "3qE0LOuAq2On37tn3rm0Hx0MsuiMnj8ASXA1vfrLv1pORB5pIxvlIQeejUA3W3g",
+"AppEndpointIp" : "10.2.148.142",
+"ClusterUsername": "admin",
+"ClusterPassword": "admin",                                                
+"AppEndpointPort" : "25694", 
+"TokenType": "Bearer",  
+"ClusterName": "AbhilashCluster",
+"ViewName" : "athena-mount-view",
+"DefaultStorageDomain": "AthenaStorageDomain", 
+"IsViewWriteable": false                                         
+}
+
+
+/* Abhilash cluster: 
+{
+"AppAuthToken" : "1191pfwQoMHW49EucNu8v6J3ifw0gYHvEUuyBYZpXY08CVxnaaV20ebDk9Jnioe",
+"AppEndpointIp" : "10.2.148.142",                                                 
+"AppEndpointPort" : "25694", 
+"TokenType": "Bearer"                                                
+}
+*/
+//TODO:  Make it env populated 
+//os.Getenv("APP_AUTHENTICATION_TOKEN")
+// os.Getenv("APPS_API_ENDPOINT_IP")
+// os.Getenv("APPS_API_ENDPOINT_PORT")

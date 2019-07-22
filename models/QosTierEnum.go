@@ -1,3 +1,4 @@
+// Copyright 2019 Cohesity Inc.
 package models
 
 import(
@@ -18,18 +19,18 @@ const (
     QosTier_KHIGH
 )
 
-func (r QosTierEnum) MarshalJSON() ([]byte, error) { 
+func (r QosTierEnum) MarshalJSON() ([]byte, error) {
     s := QosTierEnumToValue(r)
-    return json.Marshal(s) 
-} 
+    return json.Marshal(s)
+}
 
-func (r *QosTierEnum) UnmarshalJSON(data []byte) error { 
-    var s string 
+func (r *QosTierEnum) UnmarshalJSON(data []byte) error {
+    var s string
     json.Unmarshal(data, &s)
     v :=  QosTierEnumFromValue(s)
-    *r = v 
-    return nil 
- } 
+    *r = v
+    return nil
+ }
 
 
 /**
@@ -38,11 +39,11 @@ func (r *QosTierEnum) UnmarshalJSON(data []byte) error {
 func QosTierEnumToValue(qosTierEnum QosTierEnum) string {
     switch qosTierEnum {
         case QosTier_KLOW:
-    		return "kLow"		
+    		return "kLow"
         case QosTier_KMEDIUM:
-    		return "kMedium"		
+    		return "kMedium"
         case QosTier_KHIGH:
-    		return "kHigh"		
+    		return "kHigh"
         default:
         	return "kLow"
     }
